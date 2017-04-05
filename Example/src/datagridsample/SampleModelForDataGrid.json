@@ -1,0 +1,29 @@
+{
+  "name": "SampleModelForDataGrid",
+  "fields": [
+    {
+      "header": "Field 1",
+      "name": "field1"
+    },
+    {
+      "header": "Field 2",
+      "name": "field2"
+    },
+    {
+      "header": "Field 3",
+      "name": "field3"
+    },
+    {
+      "header": "Field 4",
+      "name": "field4"
+    },
+    {
+      "header": "Field 5",
+      "name": "field5"
+    },
+    {
+      "header": "Field 6",
+      "name": "field6"
+    }
+  ]
+}

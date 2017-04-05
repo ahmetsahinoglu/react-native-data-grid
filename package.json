@@ -1,0 +1,27 @@
+{
+  "name": "react-native-data-grid",
+  "version": "1.0.0",
+  "description": "react-native-data-grid",
+  "author": "Ahmet Sahinoglu",
+  "homepage": "https://github.com/ahmetMesut/react-native-data-grid",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ahmetMesut/react-native-data-grid.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ahmetMesut/react-native-data-grid/issues"
+  },
+  "dependencies": {
+    "react": "~15.4.1",
+    "react-native": "0.42.0",
+    "native-base": "2.1.0"
+  },
+  "keywords": [
+    "react",
+    "react-native",
+    "react-component",
+    "datagrid",
+    "android",
+    "ios"
+  ]
+}
