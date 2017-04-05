@@ -1,6 +1,12 @@
 # react-native-data-grid
 
-![ios.gif](docs/ios.gif)  ![docs/android.gif](docs/android.gif)
+###Sample for IOS 
+
+![ios.gif](docs/ios.gif)  
+
+###Sample for ANDROID
+ 
+![docs/android.gif](docs/android.gif)
 
 A component that performs simple CRUD operations.
 
