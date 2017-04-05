@@ -1,10 +1,10 @@
 # react-native-data-grid
 
-###Sample for IOS 
+##Sample for IOS 
 
 ![ios.gif](docs/ios.gif)  
 
-###Sample for ANDROID
+##Sample for ANDROID
  
 ![docs/android.gif](docs/android.gif)
 
