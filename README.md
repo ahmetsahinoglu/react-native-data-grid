@@ -40,14 +40,14 @@ import {DataGrid} from 'react-native-data-grid';
 | Property | Type | Default | Description|
 |---------------|------------|------------|----------------------------------------------------------------|
 | ajaxConfig         | `object  ` |            |                                        |
-| checkBox           | `bool`     |            |                                        |
+| checkBox           | `bool`     | false           |                                        |
 | checkedImage       | `element`  |            |                                        |
-| unCheckedImage     | `element ` | optional   |                                        |
+| unCheckedImage     | `element ` |            |                                        |
 | checkSize          | `number`   |            |                                        |
 | defaultGridData    | `array`    |            |                                        |
-| fields             | `array`    | optional   |                                        |
-| onClickRow         | `function` | optional   |                                        |
-| style              | `object`   | optional   |                                        |
+| fields             | `array`    |            |                                        |
+| onClickRow         | `function` |            |                                        |
+| style              | `object`   |  {marginLeft: 10, marginRight: 10}          |                                        |
 
 
 ## License
