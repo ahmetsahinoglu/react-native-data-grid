@@ -1,12 +1,11 @@
 # react-native-data-grid
 
-Sample for IOS 
 
-![ios.gif](docs/ios.gif)  
+## Sample Demo
 
-Sample for ANDROID
- 
-![docs/android.gif](docs/android.gif)
+| IOS | ANDROID |
+|---|---|
+|![ios.gif](docs/ios.gif) | ![docs/android.gif](docs/android.gif)|
 
 A component that performs simple CRUD operations.
 
@@ -53,7 +52,7 @@ import {DataGrid} from 'react-native-data-grid';
 | defaultGridData    | `array`    |            |                                        |
 | fields             | `array`    |            |                                        |
 | onClickRow         | `function` |            |                                        |
-| style              | `object`   |  {marginLeft: 10, marginRight: 10}          |                                        |
+| style              | `object`   |  {marginLeft: 10, marginRight: 10}          |                          |
 
 
 ## License
