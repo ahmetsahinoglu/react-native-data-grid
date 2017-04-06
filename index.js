@@ -1,2 +1,3 @@
-export { default as DataGrid } from "./datagrid/ReactNativeDataGrid";
-export { default as CheckBox } from "./checkbox/CheckBox";
+export { default as DataGrid } from "./src/datagrid/DataGrid";
+export { default as DataForm } from "./src/dataform/DataForm";
+export { default as CheckBox } from "./src/checkbox/CheckBox";
