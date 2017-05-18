@@ -1,26 +1,11 @@
-import React, {Component} from 'react';
-import {DataGrid} from 'react-native-data-grid';
-import {Content} from "native-base";
-import Model from './SampleModelForDataGrid.json';
-import GridData from './Response.json';
-
-const fields = [
-    {
-        "name": "Name",
-        "field": "name"
-    },
-    {
-        "name": "Surname",
-        "field": "surname"
-    },
-    {
-        "name": "Age",
-        "field": "age"
-    }
-];
+import React, {Component} from "react";
+import {ScrollView} from "react-native";
+import DataGrid from "../testsrc/datagrid/DataGrid";
+import Model from "./SampleModelForDataGrid.json";
+import GridData from "./Response.json";
 
 
-export default class FilesWaitingAtTheCenter extends Component {
+export default class DataGridSample extends Component {
 
     constructor(props) {
         super(props);
@@ -29,9 +14,9 @@ export default class FilesWaitingAtTheCenter extends Component {
 
     render() {
         return (
-            <Content>
-                <DataGrid fields={Model.fields} formFields={fields} defaultGridData={GridData} style={{marginLeft: 10, marginRight: 10, marginTop: 40}}/>
-            </Content>
+            <ScrollView>
+                <DataGrid toolbar fields={Model.fields} formFields={Model.fields} defaultGridData={GridData} style={{marginLeft: 10, marginRight: 10, marginTop: 40}}/>
+            </ScrollView>
         );
     }
 }

@@ -12,9 +12,9 @@
     "url": "https://github.com/ahmetMesut/react-native-data-grid/issues"
   },
   "dependencies": {
-    "react": "~15.4.1",
-    "react-native": "0.42.0",
-    "native-base": "2.1.0"
+    "react-native-checkbox": "^1.1.0",
+    "react-native-easy-grid": "0.1.7",
+    "react-native-vector-icons": "^4.0.1"
   },
   "keywords": [
     "react",

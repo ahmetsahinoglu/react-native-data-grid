@@ -1,6 +1,16 @@
 import React, {Component} from "react";
-import {View} from "react-native";
-import {Button, Form, Input, Item, Label, Text} from "native-base";
+import {View,Text,TouchableOpacity,StyleSheet} from "react-native";
+import {Form, Input, Item, Label} from "native-base";
+
+
+const styles = StyleSheet.create({
+    button: {
+        borderWidth: 1,
+        borderColor: "lightblue",
+        borderRadius: 0,
+        flexDirection:"row"
+    }
+});
 
 export default class DataForm extends Component {
 
@@ -26,7 +36,7 @@ export default class DataForm extends Component {
     }
 
     __onSubmit = (name) => {
-        if (this.props[name] || this.props[name]) {
+        if (this.props[name]) {
             this.props[name]();
         }
     };
@@ -52,14 +62,13 @@ export default class DataForm extends Component {
     __renderActionButton = () => {
         return (
             <View style={{flex: 1, flexDirection: "row", justifyContent: "flex-end"}}>
-                <Button small light
-                        onPress={this.__onSubmit.bind(this, "onSubmit")}
-                        title={"Submit"}
-                        style={{borderWidth: 1, borderColor: "lightblue", borderRadius: 0}}><Text>Submit</Text></Button>
-                <Button small light
-                        onPress={this.__onSubmit.bind(this, "onCancel")}
-                        title={"Cancel"}
-                        style={{borderWidth: 1, borderColor: "lightblue", borderRadius: 0}}><Text>Cancel</Text></Button>
+                <TouchableOpacity style={styles.button} onPress={this.__onSubmit.bind(this, "onSubmit")}>
+                    <Text style={styles.text}>&nbsp;Submit</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.button} onPress={this.__onSubmit.bind(this, "onCancel")}>
+                    <Text style={styles.text}>&nbsp;Cancel</Text>
+                </TouchableOpacity>
             </View>);
     }
 }

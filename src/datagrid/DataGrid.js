@@ -1,9 +1,10 @@
 import React, {Component} from "react";
-import {Alert, StyleSheet, View} from "react-native";
-import {Button, Col, Grid, Row, Text} from "native-base";
+import {Alert, StyleSheet,Text} from "react-native";
+import { Col, Row, Grid } from "react-native-easy-grid";
 import CheckBox from "../checkbox/CheckBox";
-import Icon from "react-native-vector-icons/Ionicons";
 import DataForm from "../dataform/DataForm";
+import DataGridToolbar from "./DataGridToolbar";
+import DataGridHeader from "./DataGridHeader";
 
 const styles = StyleSheet.create({
     col: {
@@ -30,6 +31,7 @@ export default class DataGrid extends Component {
     static defaultProps = {
         checkBox: true,
         toolbar: true,
+        checkColumnSize: 1,
         style: {marginLeft: 10, marginRight: 10},
         ajaxConfig: {
             method: 'GET',
@@ -57,8 +59,9 @@ export default class DataGrid extends Component {
             return (this.__renderForm());
         } else {
             return (
+
                 <Grid {...newProps}>
-                    {this.__renderToolbarButton()}
+                    {this.__renderToolbar()}
                     {this.__renderHeader()}
                     {this.__renderRow()}
                 </Grid>
@@ -66,8 +69,28 @@ export default class DataGrid extends Component {
         }
     }
 
+    __renderToolbar = () => {
+        if (this.props.toolbar) {
+            return (<DataGridToolbar onEditClick={this.__onEditClick}
+                                     onNewClick={this.__onNewClick}
+                                     onDeleteClick={this.__onDeleteClick}/> );
+        }
+    };
+
+    __renderHeader = () => {
+        return (<DataGridHeader fields={this.props.fields}
+                                checked={this.state.checked}
+                                checkBox={this.props.checkBox}
+                                checkedImage={this.props.checkedImage}
+                                unCheckedImage={this.props.unCheckedImage}
+                                onCheckClick={this.__onCheckClick}
+                                checkColumnSize={this.props.checkColumnSize}/>);
+    };
+
     __renderForm = () => {
-        return (<DataForm fields={this.props.formFields} onSubmit={this.__onSubmit} onCancel={this.__onCancel}/>);
+        return (<DataForm fields={this.props.formFields}
+                          onSubmit={this.__onSubmit}
+                          onCancel={this.__onCancel}/>);
     };
 
     __onSubmit = () => {
@@ -80,25 +103,6 @@ export default class DataGrid extends Component {
         this.setState({showForm: false});
     };
 
-    __renderToolbarButton = () => {
-        if (this.props.toolbar) {
-            return (
-                <View style={{flex: 1, flexDirection: "row", justifyContent: "flex-end", marginBottom: 2}}>
-                    <Button small light onPress={this.__onNewClick} title={""} style={{borderWidth: 1, borderColor: "lightblue", borderRadius: 0}}>
-                        <Icon size={20} name="md-add"/>
-                        <Text>&nbsp;New</Text>
-                    </Button>
-                    <Button small light onPress={this.__onEditClick} title={""} style={{borderWidth: 1, borderColor: "lightblue", borderRadius: 0}}>
-                        <Icon size={20} name="md-create"/>
-                        <Text>&nbsp;Edit</Text>
-                    </Button>
-                    <Button small light onPress={this.__onDeleteClick} title={""} style={{borderWidth: 1, borderColor: "lightblue", borderRadius: 0}}>
-                        <Icon size={20} name="md-trash"/>
-                        <Text>&nbsp;Delete</Text>
-                    </Button>
-                </View> );
-        }
-    };
 
     __onNewClick = () => {
         this.setState({showForm: true});
@@ -147,21 +151,30 @@ export default class DataGrid extends Component {
             let cols = [];
             for (let i = 0; i < gridData.length; i++) {
                 if (this.props.checkBox) {
-                    cols.push(<Col key={i + 'check'} size={this.props.checkColumnSize || 1} style={styles.col}><CheckBox checked={this.state.checked}
-                                                                                                                         checkedImage={this.props.checkedImage}
-                                                                                                                         unCheckedImage={this.props.unCheckedImage}
-                                                                                                                         style={{alignSelf: 'center'}}
-                                                                                                                         onClick={this.__onCheckClick.bind(this, gridData[i])}/></Col>);
+                    cols.push(
+                        <Col key={`rowCheck-${i}`} size={this.props.checkColumnSize} style={styles.col}>
+                            <CheckBox checked={this.state.checked}
+                                      checkedImage={this.props.checkedImage}
+                                      unCheckedImage={this.props.unCheckedImage}
+                                      style={{alignSelf: 'center'}}
+                                      onClick={this.__onCheckClick.bind(this, gridData[i])}/>
+                        </Col>);
                 }
                 for (let j = 0; j < fields.length; j++) {
                     if (gridData[i].hasOwnProperty(fields[j].name)) {
-                        cols.push(<Col key={j} size={fields[j].size || 1} style={styles.col}><Text style={{textAlign: 'center', marginTop: 10}}>{gridData[i][fields[j].name]}</Text></Col>);
+                        cols.push(
+                            <Col key={`rowValue-${j}`} size={fields[j].size || 1} style={styles.col}>
+                                <Text style={{textAlign: 'center', marginTop: 10}}>{gridData[i][fields[j].name]}</Text>
+                            </Col>);
                     } else {
-                        cols.push(<Col key={j} size={fields[j].size || 1} style={styles.col}><Text style={{textAlign: 'center'}}/></Col>);
+                        cols.push(
+                            <Col key={`rowValue-${j}`} size={fields[j].size || 1} style={styles.col}>
+                                <Text style={{textAlign: 'center'}}/>
+                            </Col>);
                     }
                 }
                 rows.push(
-                    <Row key={i + 10} style={styles.col}>
+                    <Row key={`row-${i}`} style={styles.col}>
                         {cols}
                     </Row>);
                 cols = [];
@@ -171,23 +184,7 @@ export default class DataGrid extends Component {
         }
     };
 
-    __renderHeader = () => {
-        let fields = this.props.fields;
-        let headers = [];
-        if (this.props.checkBox) {
-            headers.push(<Col key={"parentCheck"} style={styles.col}><CheckBox checked={this.state.checked} style={{alignSelf: 'center'}} onClick={this.__onCheckClick.bind(this, 'parent')}/></Col>);
-        }
-        for (let i = 0; i < fields.length; i++) {
-            headers.push(<Col key={i} size={this.props.checkColumnSize || 1} style={styles.col}><Text style={{textAlign: 'center', marginTop: 10, fontWeight: 'bold'}}>{fields[i].header}</Text></Col>);
-        }
-        return (
-            <Row key={"headerRow"} style={styles.col}>
-                {headers}
-            </Row>
-        );
-    };
-
-    __onCheckClick = (row, clicked) => {
+    __onCheckClick = (row) => {
         let selectedRows = this.state.selectedRows;
 
         if (row === 'parent') {
@@ -244,7 +241,7 @@ export default class DataGrid extends Component {
     };
 
     componentDidMount() {
-        this.props.ajaxConfig && this.props.url ? this.__readData(this.props.url, this.props.ajaxConfig) : null;
+        this.props.url ? this.__readData(this.props.url, this.props.ajaxConfig) : null;
     }
 
 }
