@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-import {Alert, StyleSheet,Text} from "react-native";
-import { Col, Row, Grid } from "react-native-easy-grid";
+import {Alert, StyleSheet, Text,View} from "react-native";
+import {Col, Row, Grid} from "react-native-easy-grid";
 import CheckBox from "../checkbox/CheckBox";
 import DataForm from "../dataform/DataForm";
 import DataGridToolbar from "./DataGridToolbar";
@@ -23,6 +23,8 @@ export default class DataGrid extends Component {
         fields: React.PropTypes.array.isRequired,
         formFields: React.PropTypes.array,
         onClickCheck: React.PropTypes.func,
+        onDeleteClick: React.PropTypes.func,
+        selectedRows: React.PropTypes.func,
         style: React.PropTypes.object,
         toolbar: React.PropTypes.bool,
         unCheckedImage: React.PropTypes.element,
@@ -49,7 +51,8 @@ export default class DataGrid extends Component {
             gridData: undefined,
             selectedRows: [],
             checked: undefined,
-            showForm: false
+            showForm: false,
+            form: {}
         }
     };
 
@@ -60,17 +63,17 @@ export default class DataGrid extends Component {
         } else {
             return (
 
-                <Grid {...newProps}>
+                <View {...newProps}>
                     {this.__renderToolbar()}
                     {this.__renderHeader()}
                     {this.__renderRow()}
-                </Grid>
+                </View>
             );
         }
     }
 
     __renderToolbar = () => {
-        if (this.props.toolbar) {
+        if (this.props.toolbar&& this.props.checkBox) {
             return (<DataGridToolbar onEditClick={this.__onEditClick}
                                      onNewClick={this.__onNewClick}
                                      onDeleteClick={this.__onDeleteClick}/> );
@@ -89,13 +92,21 @@ export default class DataGrid extends Component {
 
     __renderForm = () => {
         return (<DataForm fields={this.props.formFields}
+                          formData={this.state.form}
                           onSubmit={this.__onSubmit}
-                          onCancel={this.__onCancel}/>);
+                          onCancel={this.__onCancel}
+                          onChangeText={this.__onChangeText}/>);
+    };
+
+    __onChangeText = (text, row) => {
+        let form = this.state.form;
+        form[row.name] = text;
+        this.setState({form});
     };
 
     __onSubmit = () => {
-        Alert.alert("submit");
         this.setState({showForm: false});
+        this.__saveOrUpdate(this.props.url,)
     };
 
     __onCancel = () => {
@@ -105,25 +116,38 @@ export default class DataGrid extends Component {
 
 
     __onNewClick = () => {
-        this.setState({showForm: true});
+        this.setState({showForm: true,form:{}});
     };
 
     __onEditClick = () => {
         if (this.__validationLength()) {
-            console.log("başarılı")
+            this.setState((prevState) => {
+                return {showForm: true,form:prevState.selectedRows[0]};
+            });
         }
     };
 
     __onDeleteClick = () => {
-        if (this.__validationLength()) {
-            Alert.alert(
-                'Are you sure ?',
-                "The selected entry will be deleted. This can not be undone.",
-                [
-                    {text: 'Cancel', onPress: () => console.log('Cancel Pressed!')},
-                    {text: 'OK', onPress: () => console.log('OK Pressed!')},
-                ]);
-        }
+
+       if(this.props.onDeleteClick){
+           this.props.onDeleteClick();
+       }else{
+           Alert.alert(
+               'Are you sure ?',
+               "The selected entry will be deleted. This can not be undone.",
+               [
+                   {text: 'Cancel', onPress: () => {}},
+                   {
+                       text: 'OK', onPress: () => {
+                       let selectedRows = this.state.selectedRows;
+                       let url = this.props.url;
+                       selectedRows.map((selectedRow) => {
+                           this.__delete(url + "/" + selectedRow.id)
+                       });
+                   }
+                   }
+               ]);
+       }
     };
 
     __validationLength = () => {
@@ -185,27 +209,30 @@ export default class DataGrid extends Component {
     };
 
     __onCheckClick = (row) => {
+
         let selectedRows = this.state.selectedRows;
 
         if (row === 'parent') {
             this.setState((prevState) => {
                 return {checked: !prevState.checked};
             });
-            setTimeout(function () {
-                if (this.props.onClickCheck && this.state.checked) {
-                    this.props.onClickCheck(this.state.gridData);
-                    this.setState({selectedRows: this.state.gridData});
+
+            setTimeout(()=> {
+                if (this.state.checked) {
+                    this.props.onClickCheck ? this.props.onClickCheck(this.state.gridData) : null;
+                    this.setState((prevState) => {
+                        return {selectedRows: prevState.gridData};
+                    });
                 }
-                if (this.props.onClickCheck && !this.state.checked) {
+                if (!this.state.checked) {
                     this.setState({selectedRows: []});
-                    setTimeout(function () {
-                        this.props.onClickCheck(this.state.selectedRows);
-                    }.bind(this), 0);
-
-
+                    setTimeout(()=> {
+                        this.props.onClickCheck ? this.props.onClickCheck(this.state.selectedRows) : null;
+                    },0);
                 }
-            }.bind(this), 0);
-        } else {
+            }, 0);
+        }
+        else {
             if (selectedRows.length === 0) {
                 selectedRows.push(row);
             } else {
@@ -219,6 +246,12 @@ export default class DataGrid extends Component {
                 }
             }.bind(this), 0);
         }
+        setTimeout(()=>{
+            if(this.props.selectedRows){
+                this.props.selectedRows(this.state.selectedRows);
+            }
+        },0)
+
     };
 
     __removeFromSelectedRows = (selectedRows, row) => {
@@ -240,8 +273,47 @@ export default class DataGrid extends Component {
         });
     };
 
+    __saveOrUpdate = (url) => {
+        let methodType = "POST";
+        if (this.state.form) {
+            this.state.form.id ? methodType = "PUT" : methodType = "POST";
+        }
+        fetch(url, {
+            method: methodType,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: this.state.form
+        }).then((res) => res.json()).then((response) => {
+            console.log(response);
+        }).catch((error) => {
+            console.log(error);
+        });
+    };
+
+    __delete = (url) => {
+        console.log(url, "url");
+        fetch(url, {
+            method: "DELETE",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            }
+        }).then((res) => res.json()).then((response) => {
+            console.log(response);
+            this.setState({gridData: response});
+        }).catch((error) => {
+            console.log(error);
+        });
+    };
+
+
     componentDidMount() {
         this.props.url ? this.__readData(this.props.url, this.props.ajaxConfig) : null;
+        if(this.props.defaultGridData && !this.props.url){
+            this.setState({gridData:this.props.defaultGridData});
+        }
     }
 
 }

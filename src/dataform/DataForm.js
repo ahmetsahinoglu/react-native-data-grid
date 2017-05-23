@@ -1,29 +1,29 @@
 import React, {Component} from "react";
-import {View,Text,TouchableOpacity,StyleSheet} from "react-native";
-import {Form, Input, Item, Label} from "native-base";
-
+import {View, Text, TouchableOpacity, StyleSheet, TextInput,ScrollView} from "react-native";
 
 const styles = StyleSheet.create({
     button: {
         borderWidth: 1,
         borderColor: "lightblue",
         borderRadius: 0,
-        flexDirection:"row"
+        flexDirection: "row"
     }
 });
+
 
 export default class DataForm extends Component {
 
     static propTypes = {
         fields: React.PropTypes.array,
         onSubmit: React.PropTypes.func,
-        onCancel: React.PropTypes.func
+        onCancel: React.PropTypes.func,
+        onChangeText: React.PropTypes.func,
+        formData:React.PropTypes.object
     };
     static defaultProps = {};
 
     constructor(props) {
         super(props);
-        this.state = {};
     };
 
     render() {
@@ -45,18 +45,27 @@ export default class DataForm extends Component {
         let fields = this.props.fields;
         if (fields && fields.length > 0) {
             let arr = [];
-            fields.map(function (item) {
+            fields.map((row) => {
                 arr.push(
-                    <Form>
-                        <Item label={""} floatingLabel>
-                            <Label>{item.name}</Label>
-                            <Input />
-                        </Item>
-                    </Form>
-                );
+                    <View>
+                        <Text>{row.header}</Text>
+                        <TextInput
+                            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+                            value={this.props.formData[row.name]}
+                            onChangeText={(text) => this.__onChangeText(text,row)}/>
+                    </View>);
             });
-            return (<Form>{arr}</Form>);
+            return (
+                <ScrollView>
+                    {arr}
+                </ScrollView>
+            );
         }
+
+    };
+
+    __onChangeText(text, row) {
+        this.props.onChangeText ? this.props.onChangeText(text,row) : null;
     };
 
     __renderActionButton = () => {
