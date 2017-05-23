@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {ScrollView} from "react-native";
-import DataGrid from "../testsrc/datagrid/DataGrid";
+import {DataGrid} from 'react-native-data-grid';
 import Model from "./SampleModelForDataGrid.json";
 import GridData from "./Response.json";
 
