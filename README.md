@@ -16,7 +16,7 @@ A component that performs simple CRUD operations.
 To build the examples locally, run:
 
 ```
-$ git clone https://github.com/ahmetMesut/react-native-data-grid.git
+$ git clone https://github.com/ahmetsahinoglu/react-native-data-grid.git
 cd react-native-data-grid/Example && npm install
 react-native run-ios or react-native run-android
 ```

@@ -15,7 +15,12 @@ export default class DataGridSample extends Component {
     render() {
         return (
             <ScrollView>
-                <DataGrid toolbar fields={Model.fields} formFields={Model.fields} defaultGridData={GridData} style={{marginLeft: 10, marginRight: 10, marginTop: 40}}/>
+                <DataGrid toolbar
+                          fields={Model.fields}
+                          formFields={Model.fields}
+                          defaultGridData={GridData}
+                          selectedRows={this.__selectedRows}
+                          style={{marginLeft: 10, marginRight: 10, marginTop: 40}}/>
             </ScrollView>
         );
     }
