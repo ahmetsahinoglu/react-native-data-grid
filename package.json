@@ -3,13 +3,13 @@
   "version": "1.1.2",
   "description": "react-native-data-grid",
   "author": "Ahmet Sahinoglu",
-  "homepage": "https://github.com/ahmetMesut/react-native-data-grid",
+  "homepage": "https://github.com/ahmetsahinoglu/react-native-data-grid",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ahmetMesut/react-native-data-grid.git"
+    "url": "https://github.com/ahmetsahinoglu/react-native-data-grid.git"
   },
   "bugs": {
-    "url": "https://github.com/ahmetMesut/react-native-data-grid/issues"
+    "url": "https://github.com/ahmetsahinoglu/react-native-data-grid/issues"
   },
   "dependencies": {
     "react-native-checkbox": "^1.1.0",
